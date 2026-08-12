@@ -1,0 +1,16 @@
+{
+  "name": "snappay-ach-mock",
+  "version": "1.0.0",
+  "description": "Mock SnapPay GetTransaction API for ACH reject / return settlement testing",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

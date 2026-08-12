@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapPay ACH Return Mock</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="page" data-testid="mock-page">
+    <header class="header">
+      <div>
+        <p class="eyebrow">jBilling test tool</p>
+        <h1>SnapPay ACH Return Mock</h1>
+        <p class="subtitle">Register transaction IDs so GetTransaction returns an ACH reject response.</p>
+      </div>
+      <div class="status-pill" id="healthStatus" data-testid="health-status" role="status">Checking…</div>
+    </header>
+
+    <section class="card" data-testid="register-section">
+      <h2>Register transaction</h2>
+      <form id="registerForm" class="form-grid" data-testid="register-form">
+        <label for="transactionId">
+          <span class="label-text">Transaction ID<span class="required">*</span></span>
+          <input
+            type="text"
+            id="transactionId"
+            name="transactionId"
+            data-testid="input-transaction-id"
+            required
+            placeholder="202381296381"
+          >
+        </label>
+
+        <label for="amount">
+          <span class="label-text">Amount<span class="required">*</span></span>
+          <input
+            type="number"
+            id="amount"
+            name="amount"
+            data-testid="input-amount"
+            required
+            min="0.01"
+            step="0.01"
+            placeholder="2060"
+          >
+        </label>
+
+        <label for="returnReasonCode">
+          <span class="label-text">Return reason code</span>
+          <input
+            type="text"
+            id="returnReasonCode"
+            name="returnReasonCode"
+            data-testid="input-return-code"
+            placeholder="R29"
+          >
+        </label>
+
+        <label for="returnReasonDescription">
+          <span class="label-text">Return reason description</span>
+          <input
+            type="text"
+            id="returnReasonDescription"
+            name="returnReasonDescription"
+            data-testid="input-return-description"
+            placeholder="Leave blank for empty (SnapPay default)"
+          >
+        </label>
+
+        <label class="full-width" for="date">
+          <span class="label-text">Transaction date</span>
+          <input
+            type="text"
+            name="date"
+            id="date"
+            data-testid="input-date"
+            placeholder="6/23/2026 02:07:27 PM"
+          >
+          <span class="hint">Format: M/d/yyyy hh:mm:ss a. Refreshed to current time on each page load.</span>
+        </label>
+
+        <div class="actions full-width">
+          <button type="submit" class="btn primary" data-testid="btn-register">Register transaction</button>
+          <button type="reset" class="btn secondary" id="resetBtn" data-testid="btn-clear-form">Clear form</button>
+        </div>
+      </form>
+      <div id="formMessage" class="message" data-testid="form-message" role="alert" hidden></div>
+    </section>
+
+    <section class="card" data-testid="transactions-section">
+      <div class="section-header">
+        <h2>Registered transactions</h2>
+        <button type="button" class="btn secondary" id="refreshBtn" data-testid="btn-refresh">Refresh</button>
+      </div>
+
+      <div class="table-toolbar">
+        <label class="toolbar-field" for="searchInput">
+          <span class="label-text">Search transaction ID</span>
+          <input
+            type="search"
+            id="searchInput"
+            data-testid="search-transactions"
+            placeholder="Search by transaction ID"
+            autocomplete="off"
+          >
+        </label>
+
+        <label class="toolbar-field" for="sortField">
+          <span class="label-text">Sort by</span>
+          <select id="sortField" data-testid="sort-field">
+            <option value="registeredAt">Registered date</option>
+            <option value="transactionId">Transaction ID</option>
+            <option value="amount">Amount</option>
+            <option value="transactionDate">Transaction date</option>
+          </select>
+        </label>
+
+        <label class="toolbar-field" for="sortDirection">
+          <span class="label-text">Order</span>
+          <select id="sortDirection" data-testid="sort-direction">
+            <option value="desc">Descending</option>
+            <option value="asc">Ascending</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="table-wrap">
+        <table data-testid="transactions-table">
+          <thead>
+            <tr>
+              <th scope="col">Transaction ID</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Return code</th>
+              <th scope="col">Description</th>
+              <th scope="col">Date</th>
+              <th scope="col"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="transactionsBody" data-testid="transactions-body">
+            <tr>
+              <td colspan="6" class="empty">Loading…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination" data-testid="pagination">
+        <button type="button" class="btn secondary" id="prevPageBtn" data-testid="btn-prev-page" disabled>Previous</button>
+        <span id="paginationInfo" data-testid="pagination-info">Page 1 of 1</span>
+        <button type="button" class="btn secondary" id="nextPageBtn" data-testid="btn-next-page" disabled>Next</button>
+      </div>
+    </section>
+
+    <section class="card info" data-testid="setup-section">
+      <h2>jBilling setup</h2>
+      <ul>
+        <li>Set <strong>Snap Pay Base Url</strong> to this server (e.g. <code id="baseUrlExample" data-testid="base-url-example">http://localhost:8089/</code>)</li>
+        <li>Run <strong>SnapPay ACH Settlement File Generator</strong> after registering txn IDs from jBilling</li>
+      </ul>
+    </section>
+
+    <footer class="page-footer" data-testid="page-footer">
+      <button type="button" class="btn danger" id="clearAllBtn" data-testid="btn-clear-all">Clear all transactions</button>
+      <div id="clearAllMessage" class="message" data-testid="clear-all-message" role="alert" hidden></div>
+    </footer>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
