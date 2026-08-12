@@ -3,6 +3,7 @@ module.exports = {
   accountId: process.env.SNAPPAY_ACCOUNT_ID || '1002424079',
   returnCode: 'R29',
   dataFile: process.env.DATA_FILE || 'data/transactions.json',
+  logFile: process.env.LOG_FILE || 'data/server.log',
   paymentMethod: {
     type: 'CHECKING',
     firstname: 'Test',
