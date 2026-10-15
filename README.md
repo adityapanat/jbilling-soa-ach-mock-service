@@ -69,6 +69,8 @@ Then:
 | Method | Path | Description |
 |--------|------|-------------|
 | GET | `/health` | Health check |
+| GET | `/version` | Service version and capability overview page |
+| GET | `/api/version` | Service package metadata |
 | POST | `/api/transactions` | Register txn |
 | GET | `/api/transactions` | List all |
 | DELETE | `/api/transactions/:id` | Remove one |
@@ -118,6 +120,10 @@ PORT=8090 SNAPPAY_ACCOUNT_ID=1002424079 npm start
 | `PORT` | `8089` |
 | `SNAPPAY_ACCOUNT_ID` | `1002424079` |
 | `DATA_FILE` | `data/transactions.json` |
+| `LOG_FILE` | `data/server.log` |
+| `LOG_LEVEL` | `info` (`debug`, `info`, `warn`, or `error`) |
+
+Application logs are written to both the console and `LOG_FILE`. Every entry uses an `America/Phoenix` timestamp (MST), includes its severity, and structured events include request IDs. HTTP request start/completion, status, and duration are logged; request bodies and query strings are not recorded. Set `LOG_LEVEL=debug` to include debug-level diagnostics.
 
 ---
 

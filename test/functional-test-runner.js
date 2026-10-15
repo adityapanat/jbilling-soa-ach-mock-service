@@ -578,6 +578,40 @@ async function runTests() {
     );
   }
 
+  // TC-029 Version and service overview page
+  {
+    const res = await fetch(`${BASE}/version`);
+    const html = await res.text();
+    record(
+      'TC-029',
+      'Design',
+      'Version page presents service overview',
+      'GET /version',
+      'HTTP 200 with version field and service capabilities',
+      `status=${res.status}, versionField=${html.includes('data-testid="service-version"')}, capabilities=${html.includes('What this service offers')}`,
+      res.status === 200 &&
+        html.includes('data-testid="service-version"') &&
+        html.includes('What this service offers')
+    );
+  }
+
+  // TC-030 Version API reports package metadata
+  {
+    const { status, json } = await request('GET', '/api/version');
+    record(
+      'TC-030',
+      'Functional',
+      'Version API returns package metadata',
+      'GET /api/version',
+      'HTTP 200 with service name, version, and description',
+      `HTTP ${status}, name=${json?.name}, version=${json?.version}`,
+      status === 200 &&
+        json?.name === 'snappay-ach-mock' &&
+        /^\d+\.\d+\.\d+/.test(json?.version || '') &&
+        Boolean(json?.description)
+    );
+  }
+
   await clearAll();
 }
 

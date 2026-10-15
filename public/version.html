@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Version &amp; Service | SnapPay ACH Return Mock</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="page" data-testid="version-page">
+    <header class="header">
+      <div>
+        <p class="eyebrow">Service information</p>
+        <h1>SnapPay ACH Return Mock</h1>
+        <p class="subtitle">A QA utility for exercising jBilling ACH return settlement behavior.</p>
+      </div>
+      <a class="btn secondary header-link" href="/" data-testid="back-to-console">Back to console</a>
+    </header>
+
+    <section class="version-banner" aria-label="Service version">
+      <span class="version-label">Installed version</span>
+      <strong class="version-number" id="serviceVersion" data-testid="service-version">Loading</strong>
+      <span class="version-description" id="serviceDescription">Loading service details</span>
+    </section>
+
+    <section class="card" aria-labelledby="offers-title">
+      <h2 id="offers-title">What this service offers</h2>
+      <div class="feature-grid">
+        <article class="feature-item">
+          <h3>ACH return simulation</h3>
+          <p>Returns a SnapPay-compatible failed transaction for registered IDs, including a configurable return code, description, amount, and transaction date.</p>
+        </article>
+        <article class="feature-item">
+          <h3>Transaction registry</h3>
+          <p>Register, search, sort, and page through test transactions in the browser, or manage them through the REST API.</p>
+        </article>
+        <article class="feature-item">
+          <h3>Settlement fallback</h3>
+          <p>Unregistered transaction IDs receive a successful GetTransaction response, allowing the settlement flow to skip them.</p>
+        </article>
+        <article class="feature-item">
+          <h3>Local persistence</h3>
+          <p>Registered scenarios persist in the configured JSON data file across service restarts.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="card info" aria-labelledby="responses-title">
+      <h2 id="responses-title">Response behavior</h2>
+      <dl class="response-list">
+        <dt>Registered transaction</dt>
+        <dd>HTTP 200 with transaction status <code>Failed</code> and the configured ACH return details.</dd>
+        <dt>Unregistered transaction</dt>
+        <dd>HTTP 200 with transaction status <code>Success</code>.</dd>
+        <dt>Registration and management</dt>
+        <dd><code>POST /api/transactions</code>, <code>GET /api/transactions</code>, and DELETE endpoints.</dd>
+      </dl>
+    </section>
+
+    <footer class="page-footer">
+      <p class="hint">Internal QA use only. This mock does not validate SnapPay credentials or HMAC signatures and must not be exposed publicly.</p>
+    </footer>
+  </main>
+
+  <script>
+    fetch('/api/version')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Version lookup failed');
+        }
+        return response.json();
+      })
+      .then((metadata) => {
+        document.getElementById('serviceVersion').textContent = `v${metadata.version}`;
+        document.getElementById('serviceDescription').textContent = metadata.description;
+      })
+      .catch(() => {
+        document.getElementById('serviceVersion').textContent = 'Unavailable';
+        document.getElementById('serviceDescription').textContent = 'Version details could not be loaded.';
+      });
+  </script>
+</body>
+</html>
